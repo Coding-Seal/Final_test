@@ -3,9 +3,7 @@ package Pages.Profile;
 import com.codeborne.selenide.SelenideElement;
 
 import java.io.File;
-import java.time.Duration;
 
-import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.*;
 
@@ -16,13 +14,12 @@ public class Avatar {
     private final SelenideElement DELETE_AVATAR = $x("//div[@tsid=\"avatarShortcut\"]//div[text()='Убрать фото профиля']");
     private final SelenideElement CONFIRM_DELETE_AVATAR = $x("//span[text()='Убрать']");
     private final SelenideElement CANCEL_DELETE_AVATAR = $x("//span[text()='Отменить']");
+    private final static String MAKE_FORM_VISIBLE_JS = "document.getElementsByClassName(\"html5-upload-link\")[4].classList.remove(\"html5-upload-link\")";
 
     public Avatar uploadNew(String path) {
-        if (! isPresent()) {
-            executeJavaScript("document.getElementsByClassName(\"html5-upload-link\")[4].classList.remove(\"html5-upload-link\")");
-            UPLOAD_AVATAR.uploadFile(new File(path));
-            CONFIRM_AVATAR.shouldBe(visible).click();
-        }
+        executeJavaScript(MAKE_FORM_VISIBLE_JS);
+        UPLOAD_AVATAR.uploadFile(new File(path));
+        CONFIRM_AVATAR.shouldBe(visible).click();
         return this;
     }
 
